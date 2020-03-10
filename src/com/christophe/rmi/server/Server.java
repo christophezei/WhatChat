@@ -98,7 +98,7 @@ public class Server extends UnicastRemoteObject implements IServer{
 		try {
 			history = new String(Files.readAllBytes(Paths.get(absolutePath)), StandardCharsets.UTF_8);
 		} catch (IOException e) {
-			e.printStackTrace();
+			//can print any error
 		}
 		return history;
 	}

@@ -1,6 +1,6 @@
 package com.christophe.rmi.client;
 
-import java.awt.Color;
+
 import java.io.IOException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
@@ -8,9 +8,6 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
-import javax.swing.JFrame;
-import javax.swing.JTextField;
-import javax.swing.border.LineBorder;
 
 import com.christophe.rmi.server.IServer;
 
@@ -22,13 +19,14 @@ public class Client extends UnicastRemoteObject implements IClient, Runnable {
 	private IServer server;
 	private String clientName = null;
 	private Boolean isInPrivateChatMode=false;
+	private String dir ;
 	public static final String ANSI_BLUE = "\u001B[34m";
 	public static final String ANSI_RESET = "\u001B[0m";
-	private static JTextField textfieldInputMessage;
-	
+
 	protected Client(String clientName, IServer server) throws RemoteException {
 		this.clientName = clientName;
 		this.server = server;
+		this.dir = System.getProperty("user.home");
 		server.registerClient(clientName,this);
 	}
 
@@ -49,10 +47,8 @@ public class Client extends UnicastRemoteObject implements IClient, Runnable {
 		String message;
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm:ss");  
 		LocalDateTime now = LocalDateTime.now();
-		String dir = System.getProperty("user.home");
 		String fullPath = dir + "/WhatChatHistory/History.txt";
 		System.out.println("To see your history enter the following command '/h'");
-		//this.initMainChatRoomWindow();
 		while(true) {
 			message = scanner.nextLine();
 			this.checkHistory(message, fullPath);
@@ -82,21 +78,31 @@ public class Client extends UnicastRemoteObject implements IClient, Runnable {
 
 	private void sendPrivateMessage(Scanner scanner, DateTimeFormatter dtf, LocalDateTime now) throws RemoteException {
 		String message;
+	
+		String messageSent;
+		this.setIsInPrivateChatMode(true);
+		
 		System.out.println("Welcome to private chat section,enter the name of the user you want to chat with");
 		message = scanner.nextLine();
 		String receiver = message;
-		this.setIsInPrivateChatMode(true);
+		String fullPrivatePath = dir + "/WhatChatHistory/History-"+ clientName + "-" + receiver + ".txt";
 		System.out.println("Private chat started with " + receiver);
+	
+		
+		System.out.println("To see your history enter the following command '/h'");
 		while(this.getIsInPrivateChatMode() == true) {
 			message = scanner.nextLine();
-			String messageSent = message;
+			messageSent=message;
+			this.checkHistory(message, fullPrivatePath);
 			if(message.equals("/exit")) {
 				System.out.println("Exiting private chatting...");
 				this.setIsInPrivateChatMode(false);
 			}else {
 				if(server.isUserExist(receiver)) {
-					server.privateMessage(receiver,dtf.format(now).toString() + " " + clientName + ":" + messageSent);
-					server.writeToPrivFile(clientName,dtf.format(now).toString() + " " + clientName + ":" + messageSent);
+					if(message.charAt(0) != '/' && message.charAt(0) !='@'){
+					 server.privateMessage(receiver,dtf.format(now).toString() + " " + clientName + ":" + message);
+					 server.writeToPrivFile(receiver + "-" + clientName,dtf.format(now).toString() + " " + clientName + ":" + messageSent);
+					}
 				}else {
 					System.out.println("User does not exist!,Exiting private chatting...");
 					this.setIsInPrivateChatMode(false);
@@ -104,7 +110,7 @@ public class Client extends UnicastRemoteObject implements IClient, Runnable {
 			}
 		}
 	}
-
+	
 	private void checkHistory(String message, String fullPath) {
 		String history = null;
 		try {
@@ -132,16 +138,4 @@ public class Client extends UnicastRemoteObject implements IClient, Runnable {
 		this.isInPrivateChatMode = isInPrivateChatMode;
 	}
 	
-/*	private  void initMainChatRoomWindow() {
-		JFrame f = new JFrame("Welcome to the chat room");
-		f.setSize(800, 800);
-	    f.setLocation(300,200);
-	    f.setResizable(false);
-	    textfieldInputMessage = new JTextField("Type your message",10);
-	    textfieldInputMessage.setBorder(new LineBorder(Color.BLACK, 10));
-	    f.getContentPane().add(textfieldInputMessage);
-	    f.pack();
-	    f.setVisible(true);
-	}*/
-
 }
