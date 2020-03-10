@@ -9,7 +9,7 @@ import javax.swing.JFrame;
 public class ServerDriver {
 
 	public static void main(String[] args) throws RemoteException, MalformedURLException {
-		Naming.rebind("RMIChatServer",new Server());
+		Naming.rebind("RMIChatServer", new Server());
 		System.out.println("Server Ready!");
 	}
 
