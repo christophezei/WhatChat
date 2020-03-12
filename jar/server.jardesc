@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<jardesc>
+    <jar path="WhatChat/server.jar"/>
+    <options buildIfNeeded="true" compress="true" descriptionLocation="/WhatChat/server.jardesc" exportErrors="true" exportWarnings="true" includeDirectoryEntries="false" overwrite="false" saveDescription="true" storeRefactorings="false" useSourceFolders="false"/>
+    <storedRefactorings deprecationInfo="true" structuralOnly="false"/>
+    <selectedProjects/>
+    <manifest generateManifest="true" mainClassHandleIdentifier="=WhatChat/src&lt;com.christophe.rmi.server{ServerDriver.java[ServerDriver" manifestLocation="" manifestVersion="1.0" reuseManifest="false" saveManifest="false" usesManifest="true">
+        <sealing sealJar="false">
+            <packagesToSeal/>
+            <packagesToUnSeal/>
+        </sealing>
+    </manifest>
+    <selectedElements exportClassFiles="true" exportJavaFiles="false" exportOutputFolder="false">
+        <javaElement handleIdentifier="=WhatChat/src&lt;com.christophe.rmi.server"/>
+        <file path="/WhatChat/.classpath"/>
+        <javaElement handleIdentifier="=WhatChat/src&lt;com.christophe.rmi.client{IClient.java"/>
+        <file path="/WhatChat/README.md"/>
+        <file path="/WhatChat/.project"/>
+    </selectedElements>
+</jardesc>
