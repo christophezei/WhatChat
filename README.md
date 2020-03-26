@@ -9,7 +9,7 @@ It contains the following features :
 5)Chat persistency<br/>
 
 # How to run the server ?
-Simple navigate to the jar directory and run the following command:<br/>
+Simple navigate to the jar directory and run the following command(server is running on port 5000):<br/>
    <b>java -jar server.jar </b>
    
 # How to run the client ?
